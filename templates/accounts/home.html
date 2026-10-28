@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Hostel Management System{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <div class="hero-section">
+        <h1>Welcome to Hostel Management System</h1>
+        <p>Streamline your hostel operations with our comprehensive management solution. Manage rooms, students, fees, and more - all in one place.</p>
+    </div>
+
+    <div class="login-cards">
+        <div class="login-card">
+            <div class="card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+            </div>
+            <h3>Administrator</h3>
+            <p>Full system access. Manage rooms, students, wardens, fees, complaints, and notices.</p>
+            <a href="{% url 'accounts:admin_login' %}" class="btn btn-primary">Admin Login</a>
+        </div>
+
+        <div class="login-card">
+            <div class="card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+            </div>
+            <h3>Warden</h3>
+            <p>View students and rooms, manage fee collections, and handle student complaints.</p>
+            <a href="{% url 'accounts:warden_login' %}" class="btn btn-primary">Warden Login</a>
+        </div>
+
+        <div class="login-card">
+            <div class="card-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <h3>Student</h3>
+            <p>View your room details, pay hostel fees, read notices, and submit complaints.</p>
+            <a href="{% url 'accounts:student_login' %}" class="btn btn-primary">Student Login</a>
+            <a href="{% url 'accounts:student_register' %}" class="btn btn-secondary">Register</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

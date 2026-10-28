@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard - Hostel Management{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="page-header">
+        <h2>Student Dashboard</h2>
+        <span class="welcome-text">Welcome, {{ student.name }}</span>
+    </div>
+
+    <div class="dashboard-row">
+        <div class="dashboard-section">
+            <div class="card">
+                <h3>My Profile</h3>
+                <div class="profile-info">
+                    <div class="profile-photo">
+                        {% if student.photo %}
+                        <img src="{{ student.photo.url }}" alt="{{ student.name }}">
+                        {% else %}
+                        <div class="avatar-placeholder large">{{ student.name|slice:":1" }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="profile-details">
+                        <p><strong>Name:</strong> {{ student.name }}</p>
+                        <p><strong>Email:</strong> {{ student.email }}</p>
+                        <p><strong>Phone:</strong> {{ student.phone }}</p>
+                        <p><strong>College:</strong> {{ student.college }}</p>
+                        <p><strong>Course:</strong> {{ student.course }}</p>
+                        <p><strong>Joining Date:</strong> {{ student.joining_date }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <div class="card">
+                <h3>My Room</h3>
+                {% if student.room %}
+                <div class="room-info">
+                    <p><strong>Room Number:</strong> {{ student.room.room_number }}</p>
+                    <p><strong>Room Type:</strong> {{ student.room.room_type }}</p>
+                    <p><strong>Floor:</strong> {{ student.room.floor }}</p>
+                    <p><strong>Monthly Rent:</strong> ₹{{ student.room.rent }}</p>
+                </div>
+
+                {% if roommates %}
+                <h4>Roommates</h4>
+                <ul class="roommate-list">
+                    {% for roommate in roommates %}
+                    <li>
+                        {% if roommate.photo %}
+                        <img src="{{ roommate.photo.url }}" alt="{{ roommate.name }}" class="avatar-small">
+                        {% else %}
+                        <div class="avatar-placeholder small">{{ roommate.name|slice:":1" }}</div>
+                        {% endif %}
+                        <span>{{ roommate.name }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No roommates</p>
+                {% endif %}
+                {% else %}
+                <div class="empty-state">
+                    <p>No room assigned yet. Please contact the warden.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-row">
+        <div class="dashboard-section">
+            <div class="card">
+                <div class="card-header-row">
+                    <h3>Pending Fees</h3>
+                    <a href="{% url 'fees:student_fee_list' %}" class="btn btn-sm btn-secondary">View All</a>
+                </div>
+                {% if pending_fees %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for fee in pending_fees %}
+                            <tr>
+                                <td>{{ fee.month }}</td>
+                                <td>₹{{ fee.amount }}</td>
+                                <td>
+                                    <form method="post" action="{% url 'fees:student_pay_fee' fee.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary btn-sm">Pay Now</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No pending fees</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <div class="card">
+                <div class="card-header-row">
+                    <h3>My Complaints</h3>
+                    <a href="{% url 'complaints:student_complaint_list' %}" class="btn btn-sm btn-secondary">View All</a>
+                </div>
+                {% if my_complaints %}
+                <ul class="complaint-list">
+                    {% for complaint in my_complaints %}
+                    <li>
+                        <span class="complaint-title">{{ complaint.title }}</span>
+                        <span class="badge {% if complaint.status == 'Resolved' %}badge-success{% else %}badge-warning{% endif %}">{{ complaint.status }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">No complaints filed</p>
+                {% endif %}
+                <a href="{% url 'complaints:student_complaint_add' %}" class="btn btn-primary">File Complaint</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="quick-links">
+        <h3>Quick Actions</h3>
+        <div class="link-grid">
+            <a href="{% url 'fees:student_fee_list' %}" class="quick-link">
+                <span>View Fees</span>
+            </a>
+            <a href="{% url 'complaints:student_complaint_add' %}" class="quick-link">
+                <span>File Complaint</span>
+            </a>
+            <a href="{% url 'notice:student_notice_list' %}" class="quick-link">
+                <span>View Notices</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

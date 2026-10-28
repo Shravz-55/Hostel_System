@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Wardens - Hostel Management{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="page-header">
+        <h2>Manage Wardens</h2>
+        <a href="{% url 'accounts:warden_add' %}" class="btn btn-primary">Add Warden</a>
+    </div>
+
+    <div class="card">
+        {% if wardens %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Username</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for warden in wardens %}
+                    <tr>
+                        <td>
+                            {% if warden.photo %}
+                            <img src="{{ warden.photo.url }}" alt="{{ warden.name }}" class="avatar-small">
+                            {% else %}
+                            <div class="avatar-placeholder">{{ warden.name|slice:":1" }}</div>
+                            {% endif %}
+                        </td>
+                        <td>{{ warden.name }}</td>
+                        <td>{{ warden.email }}</td>
+                        <td>{{ warden.phone }}</td>
+                        <td>{{ warden.username }}</td>
+                        <td>
+                            <form method="post" action="{% url 'accounts:warden_delete' warden.pk %}" class="inline-form" onsubmit="return confirm('Are you sure you want to delete this warden?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No wardens found.</p>
+            <a href="{% url 'accounts:warden_add' %}" class="btn btn-primary">Add First Warden</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

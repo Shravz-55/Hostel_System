@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Room {{ room.room_number }} - Hostel Management{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="page-header">
+        <h2>Room {{ room.room_number }}</h2>
+        <a href="{% url 'rooms:room_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+
+    <div class="dashboard-row">
+        <div class="dashboard-section">
+            <div class="card">
+                <h3>Room Details</h3>
+                {% if room.room_image %}
+                <div class="room-image-large">
+                    <img src="{{ room.room_image.url }}" alt="Room {{ room.room_number }}">
+                </div>
+                {% endif %}
+                <div class="details-grid">
+                    <p><strong>Room Number:</strong> {{ room.room_number }}</p>
+                    <p><strong>Room Type:</strong> {{ room.room_type }}</p>
+                    <p><strong>Floor:</strong> {{ room.floor }}</p>
+                    <p><strong>Total Beds:</strong> {{ room.total_beds }}</p>
+                    <p><strong>Available Beds:</strong>
+                        <span class="badge {% if room.available_beds > 0 %}badge-success{% else %}badge-warning{% endif %}">
+                            {{ room.available_beds }}
+                        </span>
+                    </p>
+                    <p><strong>Monthly Rent:</strong> ₹{{ room.rent }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <div class="card">
+                <h3>Occupants ({{ students|length }})</h3>
+                {% if students %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr>
+                                <td>
+                                    {% if student.photo %}
+                                    <img src="{{ student.photo.url }}" alt="{{ student.name }}" class="avatar-small">
+                                    {% else %}
+                                    <div class="avatar-placeholder">{{ student.name|slice:":1" }}</div>
+                                    {% endif %}
+                                </td>
+                                <td>{{ student.name }}</td>
+                                <td>{{ student.phone }}</td>
+                                <td>
+                                    <a href="{% url 'students:student_view' student.pk %}" class="btn btn-secondary btn-sm">View</a>
+                                    <form method="post" action="{% url 'students:student_vacate_room' student.pk %}" class="inline-form" onsubmit="return confirm('Vacate {{ student.name }} from this room?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-warning btn-sm">Vacate</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <p>No students assigned to this room.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

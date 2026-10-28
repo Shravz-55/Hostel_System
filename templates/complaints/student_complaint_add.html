@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}File Complaint - Hostel Management{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="page-header">
+        <h2>File a Complaint</h2>
+        <a href="{% url 'complaints:student_complaint_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+
+    <div class="card">
+        <form method="post" class="form-container">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="title">Title *</label>
+                <input type="text" id="title" name="title" class="form-control {% if errors.title %}is-invalid{% endif %}" value="{{ form_data.title|default:'' }}" maxlength="200" placeholder="Brief summary of your complaint">
+                {% if errors.title %}
+                <span class="error-text">{{ errors.title }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description *</label>
+                <textarea id="description" name="description" class="form-control {% if errors.description %}is-invalid{% endif %}" rows="6" placeholder="Please describe your complaint in detail...">{{ form_data.description|default:'' }}</textarea>
+                {% if errors.description %}
+                <span class="error-text">{{ errors.description }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Submit Complaint</button>
+                <a href="{% url 'complaints:student_complaint_list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

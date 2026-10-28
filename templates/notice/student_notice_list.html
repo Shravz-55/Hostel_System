@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Notices - Hostel Management{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="page-header">
+        <h2>Notices</h2>
+    </div>
+
+    {% if notices %}
+    <div class="notice-grid">
+        {% for notice in notices %}
+        <div class="card notice-card">
+            <div class="notice-card-header">
+                <h3>{{ notice.title }}</h3>
+                <span class="notice-date">{{ notice.date }}</span>
+            </div>
+            <div class="notice-card-body">
+                <p>{{ notice.description|truncatechars:150 }}</p>
+            </div>
+            <div class="notice-card-footer">
+                <a href="{% url 'notice:student_notice_view' notice.pk %}" class="btn btn-secondary btn-sm">Read More</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="empty-state">
+            <p>No notices available.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

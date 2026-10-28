@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}My Fees - Hostel Management{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="page-header">
+        <h2>My Fees</h2>
+    </div>
+
+    {% if pending_total > 0 %}
+    <div class="alert alert-warning">
+        <strong>Total Pending:</strong> ₹{{ pending_total }}
+    </div>
+    {% endif %}
+
+    <div class="card">
+        {% if fees %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Amount (₹)</th>
+                        <th>Status</th>
+                        <th>Payment Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fee in fees %}
+                    <tr>
+                        <td>{{ fee.month }}</td>
+                        <td>{{ fee.amount }}</td>
+                        <td>
+                            <span class="badge {% if fee.status == 'Paid' %}badge-success{% else %}badge-warning{% endif %}">
+                                {{ fee.status }}
+                            </span>
+                        </td>
+                        <td>{{ fee.payment_date|default:"-" }}</td>
+                        <td>
+                            {% if fee.status == 'Pending' %}
+                            <form method="post" action="{% url 'fees:student_pay_fee' fee.pk %}" class="inline-form" onsubmit="return confirm('Confirm payment of ₹{{ fee.amount }} for {{ fee.month }}?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-sm">Pay Now</button>
+                            </form>
+                            {% else %}
+                            <span class="text-muted">Paid</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No fee records found.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

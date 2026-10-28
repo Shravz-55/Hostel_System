@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ notice.title }} - Hostel Management{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="page-header">
+        <h2>Notice Details</h2>
+        <a href="{% url 'notice:notice_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+
+    <div class="card">
+        <div class="notice-header">
+            <h3>{{ notice.title }}</h3>
+            <span class="notice-date">{{ notice.date }}</span>
+        </div>
+
+        <div class="notice-content">
+            {{ notice.description|linebreaks }}
+        </div>
+
+        <div class="notice-actions">
+            <form method="post" action="{% url 'notice:notice_delete' notice.pk %}" onsubmit="return confirm('Delete this notice?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete Notice</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

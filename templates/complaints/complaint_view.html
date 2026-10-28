@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Complaint Details - Hostel Management{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="page-header">
+        <h2>Complaint Details</h2>
+        <a href="{% url 'complaints:complaint_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+
+    <div class="card">
+        <div class="complaint-header">
+            <h3>{{ complaint.title }}</h3>
+            <span class="badge {% if complaint.status == 'Resolved' %}badge-success{% else %}badge-warning{% endif %}">
+                {{ complaint.status }}
+            </span>
+        </div>
+
+        <div class="complaint-meta">
+            <p><strong>Student:</strong> {{ complaint.student.name }}</p>
+            <p><strong>Date:</strong> {{ complaint.date }}</p>
+            <p><strong>Room:</strong> {% if complaint.student.room %}{{ complaint.student.room.room_number }}{% else %}Not Assigned{% endif %}</p>
+        </div>
+
+        <div class="complaint-description">
+            <h4>Description</h4>
+            <p>{{ complaint.description|linebreaks }}</p>
+        </div>
+
+        {% if complaint.status == 'Pending' %}
+        <div class="complaint-actions">
+            <form method="post" action="{% url 'complaints:complaint_resolve' complaint.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Mark as Resolved</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

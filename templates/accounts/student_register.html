@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Registration - Hostel Management{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card auth-card-wide">
+        <h2>Student Registration</h2>
+
+        <form method="post" enctype="multipart/form-data" class="auth-form">
+            {% csrf_token %}
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" class="form-control {% if errors.name %}is-invalid{% endif %}" value="{{ form_data.name|default:'' }}">
+                    {% if errors.name %}
+                    <span class="error-text">{{ errors.name }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" class="form-control {% if errors.email %}is-invalid{% endif %}" value="{{ form_data.email|default:'' }}">
+                    {% if errors.email %}
+                    <span class="error-text">{{ errors.email }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="phone">Phone *</label>
+                    <input type="text" id="phone" name="phone" class="form-control {% if errors.phone %}is-invalid{% endif %}" value="{{ form_data.phone|default:'' }}">
+                    {% if errors.phone %}
+                    <span class="error-text">{{ errors.phone }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="joining_date">Joining Date *</label>
+                    <input type="date" id="joining_date" name="joining_date" class="form-control {% if errors.joining_date %}is-invalid{% endif %}" value="{{ form_data.joining_date|default:'' }}">
+                    {% if errors.joining_date %}
+                    <span class="error-text">{{ errors.joining_date }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address *</label>
+                <textarea id="address" name="address" class="form-control {% if errors.address %}is-invalid{% endif %}" rows="2">{{ form_data.address|default:'' }}</textarea>
+                {% if errors.address %}
+                <span class="error-text">{{ errors.address }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="college">College *</label>
+                    <input type="text" id="college" name="college" class="form-control {% if errors.college %}is-invalid{% endif %}" value="{{ form_data.college|default:'' }}">
+                    {% if errors.college %}
+                    <span class="error-text">{{ errors.college }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="course">Course *</label>
+                    <input type="text" id="course" name="course" class="form-control {% if errors.course %}is-invalid{% endif %}" value="{{ form_data.course|default:'' }}">
+                    {% if errors.course %}
+                    <span class="error-text">{{ errors.course }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="username">Username *</label>
+                    <input type="text" id="username" name="username" class="form-control {% if errors.username %}is-invalid{% endif %}" value="{{ form_data.username|default:'' }}">
+                    {% if errors.username %}
+                    <span class="error-text">{{ errors.username }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password *</label>
+                    <input type="password" id="password" name="password" class="form-control {% if errors.password %}is-invalid{% endif %}">
+                    {% if errors.password %}
+                    <span class="error-text">{{ errors.password }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password *</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control {% if errors.confirm_password %}is-invalid{% endif %}">
+                {% if errors.confirm_password %}
+                <span class="error-text">{{ errors.confirm_password }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="photo">Photo * (JPEG, PNG, GIF)</label>
+                    <input type="file" id="photo" name="photo" class="form-control {% if errors.photo %}is-invalid{% endif %}" accept="image/*">
+                    {% if errors.photo %}
+                    <span class="error-text">{{ errors.photo }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_proof">ID Proof * (JPEG, PNG, GIF, PDF)</label>
+                    <input type="file" id="id_proof" name="id_proof" class="form-control {% if errors.id_proof %}is-invalid{% endif %}" accept="image/*,.pdf">
+                    {% if errors.id_proof %}
+                    <span class="error-text">{{ errors.id_proof }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+        </form>
+
+        <div class="auth-links">
+            <p>Already have an account? <a href="{% url 'accounts:student_login' %}">Login here</a></p>
+            <a href="{% url 'accounts:home' %}">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

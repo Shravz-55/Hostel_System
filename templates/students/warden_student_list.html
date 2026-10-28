@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}View Students - Hostel Management{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="page-header">
+        <h2>All Students</h2>
+        <div class="filter-buttons">
+            <a href="{% url 'students:warden_student_list' %}?filter=all" class="btn {% if filter_type == 'all' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">All</a>
+            <a href="{% url 'students:warden_student_list' %}?filter=with_room" class="btn {% if filter_type == 'with_room' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">With Room</a>
+            <a href="{% url 'students:warden_student_list' %}?filter=no_room" class="btn {% if filter_type == 'no_room' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">Without Room</a>
+        </div>
+    </div>
+
+    <div class="card">
+        {% if students %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>College</th>
+                        <th>Room</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>
+                            {% if student.photo %}
+                            <img src="{{ student.photo.url }}" alt="{{ student.name }}" class="avatar-small">
+                            {% else %}
+                            <div class="avatar-placeholder">{{ student.name|slice:":1" }}</div>
+                            {% endif %}
+                        </td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.phone }}</td>
+                        <td>{{ student.college|truncatechars:20 }}</td>
+                        <td>
+                            {% if student.room %}
+                            <span class="badge badge-success">{{ student.room.room_number }}</span>
+                            {% else %}
+                            <span class="badge badge-warning">Not Assigned</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'students:warden_student_view' student.pk %}" class="btn btn-secondary btn-sm">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            {% if filter_type == 'no_room' %}
+            <p>All students have rooms assigned.</p>
+            {% elif filter_type == 'with_room' %}
+            <p>No students with rooms assigned.</p>
+            {% else %}
+            <p>No students found.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

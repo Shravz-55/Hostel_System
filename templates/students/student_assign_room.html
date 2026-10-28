@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Assign Room - {{ student.name }}{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="page-header">
+        <h2>Assign Room to {{ student.name }}</h2>
+        <a href="{% url 'students:student_view' student.pk %}" class="btn btn-secondary">Back to Student</a>
+    </div>
+
+    <div class="card">
+        {% if rooms %}
+        <form method="post" class="form-container">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="room">Select Room *</label>
+                <select id="room" name="room" class="form-control" required>
+                    <option value="">Select a Room</option>
+                    {% for room in rooms %}
+                    <option value="{{ room.pk }}">
+                        Room {{ room.room_number }} ({{ room.room_type }}, Floor {{ room.floor }}) - {{ room.available_beds }} beds available - ₹{{ room.rent }}/month
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="available-rooms">
+                <h4>Available Rooms</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Room No.</th>
+                                <th>Type</th>
+                                <th>Floor</th>
+                                <th>Available Beds</th>
+                                <th>Rent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for room in rooms %}
+                            <tr>
+                                <td>{{ room.room_number }}</td>
+                                <td>{{ room.room_type }}</td>
+                                <td>{{ room.floor }}</td>
+                                <td>{{ room.available_beds }}</td>
+                                <td>₹{{ room.rent }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Assign Room</button>
+                <a href="{% url 'students:student_view' student.pk %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+        {% else %}
+        <div class="empty-state">
+            <p>No rooms with available beds.</p>
+            <a href="{% url 'rooms:room_add' %}" class="btn btn-primary">Add New Room</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

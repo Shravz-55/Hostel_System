@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ student.name }} - Hostel Management{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="page-header">
+        <h2>Student Details</h2>
+        <a href="{% url 'students:warden_student_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+
+    <div class="dashboard-row">
+        <div class="dashboard-section">
+            <div class="card">
+                <h3>Personal Information</h3>
+                <div class="profile-info">
+                    <div class="profile-photo">
+                        {% if student.photo %}
+                        <img src="{{ student.photo.url }}" alt="{{ student.name }}">
+                        {% else %}
+                        <div class="avatar-placeholder large">{{ student.name|slice:":1" }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="profile-details">
+                        <p><strong>Name:</strong> {{ student.name }}</p>
+                        <p><strong>Email:</strong> {{ student.email }}</p>
+                        <p><strong>Phone:</strong> {{ student.phone }}</p>
+                        <p><strong>Address:</strong> {{ student.address }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <div class="card">
+                <h3>Academic Information</h3>
+                <div class="details-grid">
+                    <p><strong>College:</strong> {{ student.college }}</p>
+                    <p><strong>Course:</strong> {{ student.course }}</p>
+                    <p><strong>Joining Date:</strong> {{ student.joining_date }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Room Assignment</h3>
+        {% if student.room %}
+        <div class="room-assignment">
+            <div class="details-grid">
+                <p><strong>Room Number:</strong> {{ student.room.room_number }}</p>
+                <p><strong>Room Type:</strong> {{ student.room.room_type }}</p>
+                <p><strong>Floor:</strong> {{ student.room.floor }}</p>
+                <p><strong>Monthly Rent:</strong> ₹{{ student.room.rent }}</p>
+            </div>
+            <div class="room-actions">
+                <a href="{% url 'rooms:warden_room_view' student.room.pk %}" class="btn btn-secondary">View Room</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>No room assigned. Please contact admin to assign a room.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

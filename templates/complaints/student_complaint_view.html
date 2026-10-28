@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Complaint Details - Hostel Management{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <div class="page-header">
+        <h2>Complaint Details</h2>
+        <a href="{% url 'complaints:student_complaint_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+
+    <div class="card">
+        <div class="complaint-header">
+            <h3>{{ complaint.title }}</h3>
+            <span class="badge {% if complaint.status == 'Resolved' %}badge-success{% else %}badge-warning{% endif %}">
+                {{ complaint.status }}
+            </span>
+        </div>
+
+        <div class="complaint-meta">
+            <p><strong>Date Filed:</strong> {{ complaint.date }}</p>
+        </div>
+
+        <div class="complaint-description">
+            <h4>Description</h4>
+            <p>{{ complaint.description|linebreaks }}</p>
+        </div>
+
+        {% if complaint.status == 'Pending' %}
+        <div class="complaint-status-note">
+            <p class="text-muted">Your complaint is being reviewed. You will be notified once it's resolved.</p>
+        </div>
+        {% else %}
+        <div class="complaint-status-note resolved">
+            <p>This complaint has been resolved.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
